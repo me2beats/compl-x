@@ -1,0 +1,81 @@
+[gd_scene load_steps=8 format=3 uid="uid://dibl3l83xy4i4"]
+
+[ext_resource type="Script" path="res://addons/compl-x/control.gd" id="1_y0gxr"]
+[ext_resource type="Script" path="res://addons/compl-x/item_list.gd" id="2_cxvf8"]
+[ext_resource type="PackedScene" uid="uid://cuqmy4xqcfu13" path="res://addons/compl-x/checkable_option_button.tscn" id="3_qm2m1"]
+[ext_resource type="Script" path="res://addons/compl-x/kinds.gd" id="4_icyk8"]
+[ext_resource type="Script" path="res://addons/compl-x/search_algo.gd" id="5_0m7l3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gqcnl"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.462745, 0.403922, 0.85098, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ue7a8"]
+
+[node name="CodeCompletion" type="PanelContainer"]
+offset_top = 99.0
+offset_right = 593.0
+offset_bottom = 339.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_gqcnl")
+script = ExtResource("1_y0gxr")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ItemList" type="ItemList" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath(".")
+focus_next = NodePath(".")
+focus_previous = NodePath(".")
+focus_mode = 0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ue7a8")
+script = ExtResource("2_cxvf8")
+
+[node name="Timer" type="Timer" parent="VBoxContainer/ItemList"]
+wait_time = 0.05
+
+[node name="Deadzone" type="Timer" parent="VBoxContainer/ItemList"]
+wait_time = 0.5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Kinds" parent="VBoxContainer/HBoxContainer" instance=ExtResource("3_qm2m1")]
+layout_mode = 2
+focus_mode = 0
+script = ExtResource("4_icyk8")
+
+[node name="SearchAlgo" type="OptionButton" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Search Algorithm"
+focus_mode = 0
+item_count = 4
+selected = 0
+popup/item_0/text = "Fuzzy"
+popup/item_0/id = 0
+popup/item_1/text = "Exact"
+popup/item_1/id = 1
+popup/item_2/text = "Starts with"
+popup/item_2/id = 2
+popup/item_3/text = "Ends With"
+popup/item_3/id = 3
+script = ExtResource("5_0m7l3")
+
+[node name="WaitToShow" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
+
+[connection signal="item_activated" from="VBoxContainer/ItemList" to="." method="_on_item_list_item_activated"]
+[connection signal="timeout" from="VBoxContainer/ItemList/Timer" to="VBoxContainer/ItemList" method="_on_timer_timeout"]
+[connection signal="timeout" from="VBoxContainer/ItemList/Deadzone" to="VBoxContainer/ItemList" method="_on_deadzone_timeout"]
+[connection signal="item_toggle_checked" from="VBoxContainer/HBoxContainer/Kinds" to="." method="_on_kinds_item_toggle_checked"]
+[connection signal="item_selected" from="VBoxContainer/HBoxContainer/SearchAlgo" to="VBoxContainer/HBoxContainer/SearchAlgo" method="_on_item_selected"]

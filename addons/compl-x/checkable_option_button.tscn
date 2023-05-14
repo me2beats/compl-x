@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://cuqmy4xqcfu13"]
+
+[ext_resource type="Script" path="res://addons/compl-x/checkable_option_button.gd" id="1_ywiaj"]
+[ext_resource type="Script" path="res://addons/compl-x/tree.gd" id="2_jo48l"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gm8o4"]
+
+[node name="CheckableOptionButton" type="Button"]
+size_flags_horizontal = 3
+text = "KIND"
+script = ExtResource("1_ywiaj")
+
+[node name="Tree" type="Tree" parent="."]
+layout_mode = 1
+offset_top = 31.0
+offset_right = 282.0
+offset_bottom = 353.0
+theme_override_constants/item_margin = 0
+theme_override_styles/selected_focus = SubResource("StyleBoxEmpty_gm8o4")
+columns = 3
+allow_reselect = true
+allow_rmb_select = true
+hide_folding = true
+hide_root = true
+select_mode = 1
+script = ExtResource("2_jo48l")
+
+[connection signal="item_activated" from="Tree" to="Tree" method="_on_item_activated"]
+[connection signal="item_mouse_selected" from="Tree" to="Tree" method="_on_item_mouse_selected"]
+[connection signal="item_selected" from="Tree" to="Tree" method="_on_item_selected"]
